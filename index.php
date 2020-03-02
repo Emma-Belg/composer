@@ -13,6 +13,17 @@ $logger = new Logger('logger');
 
 if(isset($_GET['type'])){
     $errorType = $_GET["type"];
+    $to = "test@email";
+    $subject = "error";
+    $from = "another@email";
+    //https://fossies.org/dox/phpmyfaq-2.9.13/classMonolog_1_1Handler_1_1NativeMailerHandler.html
+    //level is "	The minimum logging level at which this handler will be triggered" should be an int
+    $level = Logger::ERROR;
+    //bool	$bubble	Whether the messages that are handled can bubble up the stack or not
+    $bubble = true;
+    //int	$maxColumnWidth	The maximum column width that the message lines will have
+    $maxColumnWidth = 70;
+
 
     switch ($errorType) {
 
@@ -63,6 +74,8 @@ if(isset($_GET['type'])){
             $logger->pushHandler(new StreamHandler(__DIR__. '/logs/black.log', Logger::EMERGENCY));
             //$logger->pushHandler(new FirePHPHandler());
             $logger->EMERGENCY($_GET['message']);
+            $NativeMailerHandler = new  Monolog\Handler\NativeMailerHandler($to, $subject, $from, $level, $bubble, $maxColumnWidth
+            );
             break;
     }
 
@@ -73,7 +86,6 @@ if(isset($_GET['type'])){
             $logger->pushHandler(new FirePHPHandler());
             $logger->$errorType($_GET['message']);
             }
-
     }
 
     errorHandeling("INFO", "Logger::INFO", "blue");
@@ -82,36 +94,4 @@ if(isset($_GET['type'])){
 }
 
 
-
-
-/*$logger = new Logger('logger');
-
-
-
-$browserHanlder = new \Monolog\Handler\BrowserConsoleHandler(\Monolog\Logger::INFO);
-$streamHandler = new \Monolog\Handler\StreamHandler(__DIR__. '/logs/blue.log', \Monolog\Logger::DEBUG);
-
-$logger->info($_GET['message']);
-$logger->pushHandler($browserHanlder);
-$logger->pushHandler($streamHandler);
-
-//$app->container->logger = $logger;
-
-
-
-$logger->pushHandler(new StreamHandler(__DIR__. '/logs/blue.log', Logger::DEBUG));
-$logger->pushHandler(new FirePHPHandler());
-$logger->debug($_GET['message']);
-
-$logger->pushHandler(new StreamHandler(__DIR__. '/logs/yellow.log', Logger::WARNING));
-$logger->pushHandler(new FirePHPHandler());
-$logger->warning($_GET['message']);
-
-$logger->pushHandler(new StreamHandler(__DIR__. '/logs/red.log', Logger::ERROR));
-$logger->pushHandler(new FirePHPHandler());
-$logger->error($_GET['message']);
-
-$logger->pushHandler(new StreamHandler(__DIR__. '/logs/black.log', Logger::EMERGENCY));
-$logger->pushHandler(new FirePHPHandler());
-$logger->emergency($_GET['black'].$_GET['message']);*/
 require "buttons.html";
